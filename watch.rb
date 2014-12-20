@@ -1,24 +1,30 @@
-require './lib/config'
+#!/usr/bin/env ruby
+
+require './lib/pintrest_api.rb'
+require 'pry'
 require 'rb-fsevent'
 
+puts 'Starting watch for Pintrest Api'
 fsevent = FSEvent.new
 
-puts 'Starting watch for Pintrest Api'
+def test_files
+  test_files = `git ls-files`.split($RS).grep(/test/)
+  test_files.each do |f|
+    puts f
+  end
+end
 
 def test_result
-  binding.pry
-  puts result[0]
-
-  if (result[1] == 'true')
-    puts `terminal-notifier -title 'Auto Watch' -message 'Symlinker Test Ran!!' -subtitle 'Success!'`
+  if (test_files)
+    puts `terminal-notifier -title 'Auto Watch' -message 'Pintrest Api Test' -subtitle 'Success!'`
   else
-    puts `terminal-notifier -title 'Auto Watch' -message 'Symlinker Test Ran!!' -subtitle 'Failure'`
+    puts `terminal-notifier -title 'Auto Watch' -message 'Pintrest Api Test' -subtitle 'Failure'`
   end
 end
 
 fsevent.watch Dir.pwd + '/lib' do |directories|
   puts "\nChange detected running tests....."
-  puts `rubocop lib/symlinker.rb`
+  puts `rubocop lib/`
   test_result
   puts "Finshed running specs"
 end
