@@ -1,5 +1,5 @@
 require_relative './spec_helper.rb'
 
-class TestPin
+class TestBoards
 
 end

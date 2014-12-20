@@ -8,7 +8,7 @@ puts 'Starting watch for Pintrest Api'
 fsevent = FSEvent.new
 
 def test_files
-  test_files = `git ls-files`.split($RS).grep(/test/)
+  test_files = Dir[Dir.pwd + '/test/test_*.rb']
   test_files.each do |f|
     `ruby #{f}`
   end
