@@ -25,5 +25,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rubocop', '~> 0.28')
   s.add_development_dependency('rb-fsevent', '~> 0.9')
   s.add_development_dependency('terminal-notifier', '~> 1.6')
+  s.add_development_dependency('minitest', '~> 5.5')
   s.add_development_dependency('pry', '~> 0.10')
 end

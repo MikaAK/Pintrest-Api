@@ -10,7 +10,7 @@ fsevent = FSEvent.new
 def test_files
   test_files = `git ls-files`.split($RS).grep(/test/)
   test_files.each do |f|
-    puts f
+    `ruby #{f}`
   end
 end
 
@@ -22,7 +22,7 @@ def test_result
   end
 end
 
-fsevent.watch Dir.pwd + '/lib' do |directories|
+fsevent.watch [Dir.pwd + '/lib', Dir.pwd + '/test'] do |directories|
   puts "\nChange detected running tests....."
   puts `rubocop lib/`
   test_result

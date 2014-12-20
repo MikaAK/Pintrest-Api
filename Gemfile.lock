@@ -23,6 +23,7 @@ GEM
     method_source (0.8.2)
     mime-types (2.4.3)
     mini_portile (0.6.1)
+    minitest (5.5.0)
     multi_json (1.10.1)
     nokogiri (1.6.5)
       mini_portile (~> 0.6.0)
@@ -63,6 +64,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.7)
+  minitest (~> 5.5)
   pintrest-api!
   pry (~> 0.10)
   rake (~> 10.1)
