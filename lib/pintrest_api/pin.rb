@@ -4,15 +4,21 @@ module PintrestApi
     attr_reader :image_url, :title, :credits_url, :url, :description
 
     class << self
+      ##
+      # Gets all pins from a board url
+      #
+      # ==== Attributes
+      #
+      # * +board_url+ - Pintrest board url
+      # ==== Examples
+      #
+      # PintrestApi::Pin.get_for_board_url('http://pintrest.com/mikaak/my-pins')
       def get_for_board_url(board_url)
         visit board_url
         increment_page_till_bottom
         # parse_pins get_with_ajax_scroll('.pinImg')
       end
 
-      def img_count
-        binding.pry
-      end
       ## Planned
       # def top(count)
       #   # Raise error if over 800 as page will freeze if higher
