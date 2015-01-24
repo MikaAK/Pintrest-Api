@@ -3,7 +3,10 @@ module PintrestApi
   class Pin < Core
     attr_reader :image_url, :title, :credits_url, :url, :description
 
+    PIN_BASE_CSS = '.Pin'
+
     class << self
+      include Authentication
       ##
       # Gets all pins from a board url
       #
@@ -13,10 +16,17 @@ module PintrestApi
       # ==== Examples
       #
       # PintrestApi::Pin.get_for_board_url('http://pintrest.com/mikaak/my-pins')
-      def get_for_board_url(board_url)
-        visit board_url
-        increment_page_till_bottom
-        # parse_pins get_with_ajax_scroll('.pinImg')
+      def get_for_board_url(board_url, authentication)
+        login(authentication) if authentication
+        @session.visit board_url
+        @session.save_and_open_page
+        parse_pins get_with_ajax_scroll(PIN_BASE_CSS)
+      end
+
+      def get_for_board(board, authentication)
+        login(authentication) if authentication
+
+        parse_pins get_with_ajax_scroll(PIN_BASE_CSS)
       end
 
       ## Planned

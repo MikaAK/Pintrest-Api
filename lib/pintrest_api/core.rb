@@ -26,6 +26,10 @@ module PintrestApi
         @session
       end
 
+      def click(css)
+        @session.find(css).click
+      end
+
       # Create a new PhantomJS session in Capybara
       def new_session
         # Register PhantomJS (aka poltergeist) as the driver to use
@@ -49,7 +53,7 @@ module PintrestApi
 
       def scroll_page
         @session.execute_script 'window.scrollTo(0,100000)'
-        sleep 4
+        sleep 5
       end
 
       # Returns the current session's page
@@ -65,6 +69,7 @@ module PintrestApi
           old_items_count = items.count
           scroll_page if old_items_count > 0
           items = Nokogiri::HTML.parse(html).css css_selector
+          
           puts "New Count: #{items.count}\nOld Count: #{old_items_count}"
         end
 
