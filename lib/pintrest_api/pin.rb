@@ -13,19 +13,19 @@ module PintrestApi
       # ==== Attributes
       #
       # * +board_url+ - Pintrest board url
+      # * +authentication+ -
       # ==== Examples
       #
       # PintrestApi::Pin.get_for_board_url('http://pintrest.com/mikaak/my-pins')
       def get_for_board_url(board_url, authentication)
         login(authentication) if authentication
         @session.visit board_url
-        @session.save_and_open_page
         parse_pins get_with_ajax_scroll(PIN_BASE_CSS)
       end
 
       def get_for_board(board, authentication)
         login(authentication) if authentication
-
+        @session.visit board.url
         parse_pins get_with_ajax_scroll(PIN_BASE_CSS)
       end
 
