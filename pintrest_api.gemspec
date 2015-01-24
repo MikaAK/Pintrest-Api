@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'pintrest-api'
-  s.version     = '0.0.0'
+  s.version     = '0.0.1'
   s.platform = Gem::Platform::RUBY
   s.required_ruby_version = '>= 1.9.3'
   s.date        = '2014-12-20'
