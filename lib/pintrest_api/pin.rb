@@ -1,5 +1,4 @@
 module PintrestApi
-  VERSION = '0.0.3'
 
   # Pintrest Pin model
   class Pin < Core
