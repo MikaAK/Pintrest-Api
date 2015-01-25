@@ -65,11 +65,11 @@ module PintrestApi
         old_items_count = 0
         items = []
 
-        until (items.count == old_items_count) && items.count > 0
+        until (items.count === old_items_count) && items.count > 0
           old_items_count = items.count
           scroll_page if old_items_count > 0
-          items = Nokogiri::HTML.parse(html).css css_selector
-          
+          newItems = Nokogiri::HTML.parse(html).css css_selector
+          items = newItems if old_items_count === 0 || newItems.count > old_items_count
           puts "New Count: #{items.count}\nOld Count: #{old_items_count}"
         end
 

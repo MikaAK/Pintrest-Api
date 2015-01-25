@@ -1,6 +1,8 @@
 module PintrestApi
   # Pintrest Boards this is used to fetch boards and related pins
   module Authentication
+    attr_accessor :is_logged_in
+
     EMAIL_INPUT_CSS       = '.loginUsername input'
     PASSWORD_INPUT_CSS    = '.loginPassword input'
     LOGIN_PAGE_BUTTON_CSS = '.formFooter .formFooterButtons'
@@ -12,7 +14,6 @@ module PintrestApi
       @session.find(EMAIL_INPUT_CSS).set authentication[:email]
       @session.find(PASSWORD_INPUT_CSS).set authentication[:password]
       click LOGIN_PAGE_BUTTON_CSS
-
       sleep 5
       puts 'Finished logging in'
     end
