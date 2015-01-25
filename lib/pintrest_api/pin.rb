@@ -1,4 +1,6 @@
 module PintrestApi
+  VERSION = '0.0.3'
+
   # Pintrest Pin model
   class Pin < Core
     attr_reader :image_url, :title, :credits_url, :url, :description
