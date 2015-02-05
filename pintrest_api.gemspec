@@ -1,6 +1,11 @@
+# coding: utf-8
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'pintrest/api/version'
+
 Gem::Specification.new do |s|
   s.name                  = 'pintrest-api'
-  s.version               = '0.0.4'
+  s.version               = PintrestApi::VERSION
   s.platform              = Gem::Platform::RUBY
   s.required_ruby_version = '>= 1.9.3'
   s.require_paths         = 'lib'
@@ -13,8 +18,10 @@ Gem::Specification.new do |s|
   DESCRIPTION
   s.authors               = ['Mika Kalathil']
   s.email                 = 'me@mikakalathil.ca'
-  s.test_files            = Dir['test/**/*']
-  s.files                 = Dir['lib/**/*']
+  s.files                 = `git ls-files -z`.split("\x0")
+  s.executables           = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  s.test_files            = s.files.grep(%r{^(test|spec|features)/})
+  s.require_paths         = ["lib"]
   s.homepage              = 'http://rubygems.org/gems/pintrest-api'
   s.license               = 'MIT'
   s.rubygems_version      = '1.8.23'

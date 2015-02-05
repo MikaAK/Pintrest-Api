@@ -4,11 +4,12 @@ module PintrestApi
   class Pin < Core
     attr_reader :image_url, :title, :credits_url, :url, :description
 
+    PINTREST_URL     = 'http://www.pintrest.com'
     PIN_BASE_CSS     = '.Grid .Module.Pin.PinBase'
     PIN_IMAGE_CSS    = '.pinHolder .pinImg'
     PIN_TITLE_CSS    = '.richPinGridTitle'
     PIN_CREDIT_CSS   = '.creditItem a'
-    PIN_URL_CSS      = '.pinImageActionButtonWrapper .pinNavLink'
+    PIN_URL_CSS      = '.pinHolder .pinImageWrapper'
     PIN_DESCRIPT_CSS = '.pinDescription'
 
     def initialize(image_url, title, credits_url, url, description)
@@ -45,6 +46,7 @@ module PintrestApi
         login(authentication) if !@is_logged_in || authentication
         @is_logged_in = true
         @session.visit http_url(board.url)
+        sleep 2
         parse_pins get_with_ajax_scroll(PIN_BASE_CSS)
       end
 
@@ -66,9 +68,12 @@ module PintrestApi
         nokogiri_items.each do |item|
           pin_image       = attribute_value(item, PIN_IMAGE_CSS, 'src')
           pin_credits     = attribute_value(item, PIN_CREDIT_CSS, 'href')
+          pin_credits     = pin_credits && PINTREST_URL + pin_credits
           pin_url         = attribute_value(item, PIN_URL_CSS, 'href')
+          pin_url         = pin_url && PINTREST_URL + pin_url
           pin_description = item.css(PIN_DESCRIPT_CSS).inner_text.strip
           pin_title       = item.css('.richPinGridTitle').inner_text.strip
+
 
           pins << Pin.new(pin_image, pin_title, pin_credits, pin_url, pin_description)
         end
