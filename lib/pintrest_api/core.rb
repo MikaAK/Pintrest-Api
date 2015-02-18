@@ -2,6 +2,7 @@ require 'capybara'
 require 'capybara/dsl'
 require 'capybara/poltergeist'
 
+
 module PintrestApi
   ##
   # This class is the core of the pintrest api and handles all url visiting and such
@@ -19,6 +20,18 @@ module PintrestApi
         @session
       end
 
+      def session_visit(url)
+        begin
+          @session.visit url
+          sleep 2
+        rescue Capybara::Poltergeist::TimeoutError
+          puts 'Gotten blocked by pintrest waiting 2 min to try again'
+          sleep 120
+
+          session_visit url
+        end
+      end
+
       def visit(url)
         new_session
         @session.visit url
@@ -34,7 +47,7 @@ module PintrestApi
       def new_session
         # Register PhantomJS (aka poltergeist) as the driver to use
         Capybara.register_driver :poltergeist do |app|
-          Capybara::Poltergeist::Driver.new(app)
+          Capybara::Poltergeist::Driver.new(app, timeout: 60)
         end
 
         # Use XPath as the default selector for the find method
@@ -53,7 +66,7 @@ module PintrestApi
 
       def scroll_page
         @session.execute_script 'window.scrollTo(0,100000)'
-        sleep 5
+        sleep 2
       end
 
       # Returns the current session's page
@@ -65,9 +78,12 @@ module PintrestApi
         old_items_count = 0
         items = []
 
+
+
         until (items.count === old_items_count) && items.count > 0
           old_items_count = items.count
           scroll_page if old_items_count > 0
+
           newItems = Nokogiri::HTML.parse(html).css css_selector
           items = newItems if old_items_count === 0 || newItems.count > old_items_count
           puts "New Count: #{items.count}\nOld Count: #{old_items_count}"
