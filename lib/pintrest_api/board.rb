@@ -54,7 +54,7 @@ module PintrestApi
       # * +board_name+ - Pintrest board_name
       # ==== Examples
       #
-      # PintrestApi::Board.pins('mikakalathil', 'My Board Name!!!')
+      # PintrestApi::Board.pins('mikakalathil', 'My Board Name!!!', {email: 'asdf@gmail.com', password: 'asdf'})
       def pins(user_name, board_name, authentication)
         board_slug = board_name.downcase.gsub(/[_\s]/, '-')
         Pin.get_for_board_url("#{PINTREST_URL}#{user_name}/#{board_slug}", authentication)

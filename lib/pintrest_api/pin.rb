@@ -33,7 +33,7 @@ module PintrestApi
       # * +authentication+ -
       # ==== Examples
       #
-      # PintrestApi::Pin.get_for_board_url('http://pintrest.com/mikaak/my-pins')
+      # PintrestApi::Pin.get_for_board_url('http://pintrest.com/mikaak/my-pins', , {email: 'asdf@gmail.com', password: 'asdf'})
       def get_for_board_url(board_url, authentication)
         login authentication if !@is_logged_in && authentication
         @is_logged_in = true
@@ -45,7 +45,7 @@ module PintrestApi
       def get_for_board(board, authentication)
         login authentication if !@is_logged_in && authentication
         @is_logged_in = true
-        
+
         session_visit http_url(board.url)
         parse_pins get_with_ajax_scroll(PIN_BASE_CSS)
       end
