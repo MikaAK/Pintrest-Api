@@ -3,11 +3,11 @@ module PintrestApi
   class Board < Core
     attr_reader :title, :url, :pin_count
 
-    PINTREST_URL        = 'http://www.pintrest.com/'
+    PINTREST_URL = 'http://www.pinterest.com/'
     BOARD_PIN_COUNT_CSS = '.PinCount'
     BOARD_LINK_CSS      = '.boardLinkWrapper'
     BOARD_TITLE_CSS     = 'h3.boardName .title'
-    BOARD_ITEM_CSS      = '.GridItems > .item'
+    BOARD_ITEM_CSS      = '.UserBoards .item'
 
     ##
     # Get a instance of a board
@@ -31,6 +31,7 @@ module PintrestApi
     end
 
     class << self
+      include Authentication
       ##
       # Gets all boards from a user
       #
@@ -40,8 +41,12 @@ module PintrestApi
       # ==== Examples
       #
       # PintrestApi::Board.all('mikakalathil')
-      def all(user_name)
-        visit_page user_name
+      def all(user_name, authentication)
+        try_or_check_login authentication
+
+        session_visit user_name
+        @session.save_and_open_page
+
         parse_boards get_with_ajax_scroll(BOARD_ITEM_CSS)
       end
 
@@ -56,8 +61,10 @@ module PintrestApi
       #
       # PintrestApi::Board.pins('mikakalathil', 'My Board Name!!!', {email: 'asdf@gmail.com', password: 'asdf'})
       def pins(user_name, board_name, authentication)
+        try_or_check_login authentication
+
         board_slug = board_name.downcase.gsub(/[_\s]/, '-')
-        Pin.get_for_board_url("#{PINTREST_URL}#{user_name}/#{board_slug}", authentication)
+        Pin.get_for_board_url("#{user_name}/#{board_slug}", authentication)
       end
 
       private

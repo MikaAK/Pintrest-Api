@@ -5,8 +5,8 @@ module PintrestApi
   class Pin < Core
     attr_reader :image_url, :title, :credits_url, :url, :description
 
-    PINTREST_URL     = 'http://www.pintrest.com'
-    PIN_BASE_CSS     = '.Grid .Module.Pin.PinBase'
+    PINTREST_URL     = 'http://www.pinterest.com'
+    PIN_BASE_CSS     = '.Grid .Pin'
     PIN_IMAGE_CSS    = '.pinHolder .pinImg'
     PIN_TITLE_CSS    = '.richPinGridTitle'
     PIN_CREDIT_CSS   = '.creditItem a'
@@ -33,21 +33,49 @@ module PintrestApi
       # * +authentication+ -
       # ==== Examples
       #
-      # PintrestApi::Pin.get_for_board_url('http://pintrest.com/mikaak/my-pins', , {email: 'asdf@gmail.com', password: 'asdf'})
+      # PintrestApi::Pin.get_for_board_url('http://pintrest.com/mikaak/my-pins', {email: 'asdf@gmail.com', password: 'asdf'})
       def get_for_board_url(board_url, authentication)
-        login authentication if !@is_logged_in && authentication
-        @is_logged_in = true
+        try_or_check_login authentication
 
         session_visit http_url(board_url)
         parse_pins get_with_ajax_scroll(PIN_BASE_CSS)
       end
 
-      def get_for_board(board, authentication)
-        login authentication if !@is_logged_in && authentication
-        @is_logged_in = true
+      ##
+      # Gets all pins from a board url
+      #
+      # ==== Attributes
+      #
+      # * +board+ - Pintrest board
+      # * +authentication+ -
+      # ==== Examples
+      #
+      # PintrestApi::Pin.get_for_board(board, {email: 'asdf@gmail.com', password: 'asdf'})
+      def get_for_board(board, authentication = nil)
+        try_or_check_login authentication
 
         session_visit http_url(board.url)
         parse_pins get_with_ajax_scroll(PIN_BASE_CSS)
+      end
+
+      ##
+      # Gets all pins from a board url
+      #
+      # ==== Attributes
+      #
+      # * +board+ - Pintrest board
+      # * +authentication+ -
+      # * +&block+ - a stream of every 25ish pins
+      # ==== Examples
+      #
+      # PintrestApi::Pin.get_for_board_stream(board, {email: 'asdf@gmail.com', password: 'asdf'}) do |pins| end
+      def get_for_board_stream(board, authentication = nil)
+        try_or_check_login authentication
+
+        session_visit http_url(board.url)
+        stream_with_ajax_scroll(PIN_BASE_CSS) do |pins|
+          yield parse_pins pins
+        end
       end
 
       ## Planned
